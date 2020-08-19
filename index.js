@@ -2,12 +2,12 @@ const RP = require('request-promise');
 const { promisify } = require("util");
 const redis = require('redis');
 const { execSync } = require('child_process');
-const Shell = require('node-powershell');
+// const Shell = require('node-powershell');
 
-const ps = new Shell({
-    executionPolicy: 'Bypass',
-    noProfile: true
-})
+// const ps = new Shell({
+//     executionPolicy: 'Bypass',
+//     noProfile: true
+// })
 
 let smembersAsync;
 let saddAsync;
@@ -49,9 +49,9 @@ async function run() {
 
         let text  = `BTC is ${amount} USD`;
         console.log("TEXT", text);
-        ps.addCommand(`New-BurntToastNotification -Text ` + "\""+ text + "\"");
+        // ps.addCommand(`New-BurntToastNotification -Text ` + "\""+ text + "\"");
 
-        await ps.invoke();
+        // await ps.invoke();
         
         let resultUpdate = await RP.get('https://api.telegram.org/bot1314209140:AAGoYkC6jNipcyHenjJGGvUVHekcC5iAT8s/getUpdates');
 
