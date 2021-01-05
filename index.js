@@ -9,6 +9,9 @@ const { execSync } = require('child_process');
 //     noProfile: true
 // })
 
+const COIN_MARKET_API = '3b45cf0b-072c-4bca-8586-1197078dd69e';
+const COIN_API = '83E59ECE-AA30-42CE-B3BF-F475F56B0CFF';
+
 let smembersAsync;
 let saddAsync;
 
@@ -35,24 +38,28 @@ async function run() {
     try {
         error_count = 0;
 
-        let res = await RP.get('https://blockchain.info/ticker')
+        let res = await RP.get(`https://rest.coinapi.io/v1/assets?apiKey=${COIN_API}`);
 
-        console.log(res);
         res = JSON.parse(res);
 
         // console.log(res["USD"].last);
 
-        let amount = res["USD"].last;
+        let assets = res;
+
+        let btc = assets.find(x => x.asset_id == "BTC");
+        let eth = assets.find(x => x.asset_id == "ETH");
+
+        let amount = parseFloat(btc.price_usd).toFixed(2);
+        let ethAmount = parseFloat(eth.price_usd).toFixed(2);
 
         // execSync(`osascript -e 'display notification "$${amount}" with title "BTC now"'`);
 
-
-        let text  = `BTC is ${amount} USD`;
+        let text = `BTC is ${amount} USD`;
         console.log("TEXT", text);
         // ps.addCommand(`New-BurntToastNotification -Text ` + "\""+ text + "\"");
 
         // await ps.invoke();
-        
+
         let resultUpdate = await RP.get('https://api.telegram.org/bot1314209140:AAGoYkC6jNipcyHenjJGGvUVHekcC5iAT8s/getUpdates');
 
         resultUpdate = JSON.parse(resultUpdate);
@@ -80,7 +87,9 @@ async function run() {
                     RP.post('https://api.telegram.org/bot1314209140:AAGoYkC6jNipcyHenjJGGvUVHekcC5iAT8s/sendMessage', {
                         body: {
                             chat_id,
-                            text: `Current BTC price $${amount}`
+                            text: `Current BTC price $${amount} \n
+Current ETH price $${ethAmount}
+                            `
                         },
                         json: true,
                     })
