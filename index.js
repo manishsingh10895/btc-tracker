@@ -126,7 +126,7 @@ Current ETH price $${ethAmount}
 
 setInterval(async () => {
     run();
-}, 15 * 60 * 1000)
+}, 8 * 60 * 1000)
 
 //1606456 CHAT_ID 608597269
 
