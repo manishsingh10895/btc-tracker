@@ -30,6 +30,26 @@ function connect() {
     saddAsync = promisify(client.sadd).bind(client);
 }
 
+async function zebpayAmount() {
+    try {
+        let res = await RP.get(`https://www.zebapi.com/pro/v1/market/`);
+        res = JSON.parse(res);
+        let btc = res.find(x => x.pair == "BTC-INR");
+        let eth = res.find(x => x.pair == "ETH-INR");
+
+        let btcAmount = btc.buy;
+        let ethAmount = eth.buy;
+
+        return {
+            zBTC: btcAmount,
+            zETH: ethAmount
+        }
+    } catch (error) {
+        console.error("Error in zebpay api");
+        console.error(error);
+    }
+}
+
 async function run() {
     if (!client.connected) return;
 
@@ -68,6 +88,8 @@ async function run() {
 
         console.log(resultUpdate.result);
 
+        const { zBTC, zETH } = await zebpayAmount();
+
         if (true) {
             let result = chat_ids.concat(resultUpdate.result.map(r => {
                 console.log(JSON.stringify(r));
@@ -87,8 +109,9 @@ async function run() {
                     RP.post('https://api.telegram.org/bot1314209140:AAGoYkC6jNipcyHenjJGGvUVHekcC5iAT8s/sendMessage', {
                         body: {
                             chat_id,
-                            text: `Current BTC price $${amount} \n
-Current ETH price $${ethAmount}
+                            text: `BTC $${amount} \nETH price $${ethAmount}
+Zeb BTC $${zBTC}
+Zeb ETH $${zETH}             
                             `
                         },
                         json: true,
