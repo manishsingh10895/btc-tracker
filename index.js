@@ -12,7 +12,6 @@ const { execSync } = require('child_process');
 const COIN_MARKET_API = '3b45cf0b-072c-4bca-8586-1197078dd69e';
 const COIN_APIS = [
     '83E59ECE-AA30-42CE-B3BF-F475F56B0CFF',
-    'F117D5F2-F5CD-4297-88D1-374392BD56AC',
     'EDF31945-3C23-47FA-A156-92A6CAB03609'
 ];
 
@@ -113,9 +112,11 @@ async function run() {
                     RP.post('https://api.telegram.org/bot1314209140:AAGoYkC6jNipcyHenjJGGvUVHekcC5iAT8s/sendMessage', {
                         body: {
                             chat_id,
-                            text: `BTC $${amount} \nETH price $${ethAmount}
-Zeb BTC $${zBTC}
-Zeb ETH $${zETH}             
+                            text: `Zeb BTC ₹${zBTC}
+Zeb ETH ₹${zETH}
+BTC $${amount} 
+ETH price $${ethAmount}
+             
                             `
                         },
                         json: true,
