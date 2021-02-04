@@ -10,7 +10,11 @@ const { execSync } = require('child_process');
 // })
 
 const COIN_MARKET_API = '3b45cf0b-072c-4bca-8586-1197078dd69e';
-const COIN_API = '83E59ECE-AA30-42CE-B3BF-F475F56B0CFF';
+const COIN_APIS = [
+    '83E59ECE-AA30-42CE-B3BF-F475F56B0CFF',
+    'F117D5F2-F5CD-4297-88D1-374392BD56AC',
+    'EDF31945-3C23-47FA-A156-92A6CAB03609'
+];
 
 let smembersAsync;
 let saddAsync;
@@ -57,8 +61,8 @@ async function run() {
 
     try {
         error_count = 0;
-
-        let res = await RP.get(`https://rest.coinapi.io/v1/assets?apiKey=${COIN_API}`);
+        let index = Math.floor((Math.random() * COIN_APIS.length) + 0);
+        let res = await RP.get(`https://rest.coinapi.io/v1/assets?apiKey=${COIN_APIS[index]}`);
 
         res = JSON.parse(res);
 
