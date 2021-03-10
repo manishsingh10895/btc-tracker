@@ -40,13 +40,19 @@ async function zebpayAmount() {
         res = JSON.parse(res);
         let btc = res.find(x => x.pair == "BTC-INR");
         let eth = res.find(x => x.pair == "ETH-INR");
+        let matic = res.find(x => x.pair == "MATIC-INR");
+        let bnb = res.find(x => x.pair == "BNB-INR");
 
-        let btcAmount = btc.buy;
-        let ethAmount = eth.buy;
+        let btcAmount = btc.sell;
+        let ethAmount = eth.sell;
+        let maticAmount = matic.sell;
+        let bnbAmount = bnb.sell;
 
         return {
             zBTC: btcAmount,
-            zETH: ethAmount
+            zETH: ethAmount,
+            zMatic: maticAmount,
+            zBNB: bnbAmount
         }
     } catch (error) {
         console.error("Error in zebpay api");
@@ -92,7 +98,7 @@ async function run() {
 
         console.log(resultUpdate.result);
 
-        const { zBTC, zETH } = await zebpayAmount();
+        const { zBTC, zETH, zBNB, zMatic } = await zebpayAmount();
 
         if (true) {
             let result = chat_ids.concat(resultUpdate.result.map(r => {
@@ -113,12 +119,12 @@ async function run() {
                     RP.post('https://api.telegram.org/bot1314209140:AAGoYkC6jNipcyHenjJGGvUVHekcC5iAT8s/sendMessage', {
                         body: {
                             chat_id,
-                            text: `Zeb BTC ₹${zBTC}
+                            text: `MATIC ₹${zMatic}
+Zeb BTC ₹${zBTC}
+BNB ₹${zBNB}
 Zeb ETH ₹${zETH}
 BTC $${amount} 
-ETH price $${ethAmount}
-             
-                            `
+ETH price $${ethAmount}`
                         },
                         json: true,
                     })
